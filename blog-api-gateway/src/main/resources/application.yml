@@ -1,0 +1,80 @@
+server:
+  port: 9898
+  servlet:
+    context-path: /blog
+  undertow:
+    threads:
+      io: 10
+      worker: 100
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+      location: /data/temp
+  application:
+    name: blog
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog
+    username: root
+    password: wm028110
+    type: com.alibaba.druid.pool.DruidDataSource
+  druid:
+    # 初始化物理连接个数
+    initial-size: 5
+    # 最大连接池数量
+    max-active: 80
+    # 最小连接池数量
+    min-idle: 5
+    # 获取连接时最大等待时间(ms)
+    max-wait: 60000
+    # 开启缓存preparedStatement(PSCache)
+    pool-prepared-statements: true
+    # 启用PSCache后，指定每个连接上PSCache的大小
+    max-pool-prepared-statement-per-connection-size: 20
+    # 用来检测连接是否有效的sql
+    validation-query: select 'x'
+    # 申请连接时不检测连接是否有效
+    test-on-borrow: false
+    # 归还连接时不检测连接是否有效
+    test-on-return: false
+    # 申请连接时检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效（不影响性能）
+    test-while-idle: true
+    # 检测连接的间隔时间，若连接空闲时间 >= minEvictableIdleTimeMillis，则关闭物理连接
+    time-between-eviction-runs-millis: 60000
+    # 连接保持空闲而不被驱逐的最小时间(ms)
+    min-evictable-idle-time-millis: 300000
+
+  redis:
+    port: 6379
+    host: 127.0.0.1
+    password: wm028110
+    database: 0 # 指定redis的分库(共16个,0-15)
+
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml,classpath*:/mappers/*.xml
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+  configuration:
+    map-underscore-to-camel-case: true
+    variables:
+      AESKEY: 76a67194c224cae4b545e3a2371879b4
+  tenant:
+    tenantIdColumn: org_id
+    includeTableNames:
+      - activity
+      - activity_apply
+
+oss:
+  accessKey: 1Mbm7sgngjzJ5Cy-djLwrD-_L5vkPv9UKpIhlxhP
+  secretKey: 563GStuKJqKise0bWIL2yqMydeNqldfczAo7_gcC
+  bucket: wming-blog

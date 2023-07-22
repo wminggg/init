@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.article.mapper.ArticleInfoMapper">
+ 
+    <resultMap type="com.article.model.entity.ArticleInfoEntity" id="ArticleInfoBaseResultMap">
+        <result property="articleId" column="article_id"/>
+        <result property="tagId" column="tag_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="isTop" column="is_top"/>
+        <result property="status" column="status"/>
+        <result property="thumbnail" column="thumbnail"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isComment" column="is_comment"/>
+        <result property="visibility" column="visibility"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="favoriteCount" column="favorite_count"/>
+        <result property="createBy" column="create_by"/>
+    </resultMap>
+
+    <!-- 按照收藏量排序查询文章 -->
+    <select id="selectHotArticles" resultType="com.article.model.entity.ArticleInfoEntity">
+        SELECT *
+        FROM wm_article_info
+        WHERE status = #{status}
+        ORDER BY like_Count DESC, favorite_count DESC
+    </select>
+
+    <!-- 批量查询-->
+    <select id="selectArticleList" resultType="com.article.model.entity.ArticleInfoEntity" parameterType="com.baomidou.mybatisplus.extension.plugins.pagination.Page">
+        SELECT *
+        FROM wm_article_info
+        WHERE
+        <if test="categoryId != null and categoryId > 0">
+            category_id = #{categoryId} AND
+        </if>
+        status = #{status}
+        ORDER BY is_top DESC
+    </select>
+
+    <!-- 多表联查-->
+    <!-- 根据分类ID查询文章列表，并关联查询分类信息 -->
+    <!-- 定义结果映射 -->
+<!--    <resultMap id="articleResultMap" type="com.article.model.entity.ArticleCategoryEntityEntity">-->
+<!--        <result property="categoryId" column="category_id"/>-->
+<!--        <result property="categoryName" column="category_name"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="selectArticleListWithCategory" resultType="com.article.model.entity.ArticleInfoEntityEntity">-->
+<!--        SELECT ai.*, ac.category_name as category_name-->
+<!--        FROM wm_article_info ai-->
+<!--                 LEFT JOIN wm_article_category ac ON ai.category_id = ac.category_id-->
+<!--        WHERE ai.category_id = #{categoryId}-->
+<!--          AND ai.status = #{status}-->
+<!--        ORDER BY ai.create_time DESC-->
+<!--    </select>-->
+
+</mapper>
