@@ -15,7 +15,7 @@ spring:
       max-request-size: 100MB
       location: /data/temp
   application:
-    name: blog
+    name: blog-backend
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
